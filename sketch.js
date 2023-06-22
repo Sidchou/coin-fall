@@ -1,7 +1,8 @@
 let overAllTexture = [];
 let texture = 0;
 let p = [];
-let amount = 1/500;
+let size = 50;
+let amount = 1/1200
 let colors = ["#f5dc23","#dcc61f","#c4b01c","#ab9a18"];
 function setupGraphic() {
     
@@ -30,7 +31,7 @@ function newParticles(num){
   
    
   for (let i = 0; i < num; i++) {
-    p.push(new Particles(random(0, width), random(0, -100), 100, 30));
+    p.push(new Particles(random(0, width), random(0, -200), 100, size));
   }
   p.sort((a,b) => b.distant - a.distant);
   }
@@ -43,10 +44,11 @@ function showDebug()
 }
 ////-- P5 --////
 function setup() {
+  size = min(windowHeight,windowWidth) /15;
   createCanvas(windowWidth, windowHeight);
-  newParticles(width * amount * 5)
+  newParticles(width * amount * 6)
   setupGraphic();
-  //console.log(p);
+  //nsole.log(size);
 }
 
 function windowResized() {
@@ -72,11 +74,11 @@ function draw() {
   //filter(POSTERIZE, 3);
   updateGraphic();
   
-  showDebug();
+  //owDebug();
 }
 
 function mousePressed() {
-  p.push(new Particles(mouseX, mouseY, 100, 30));
+  p.push(new Particles(mouseX, mouseY, 100, size));
   //console.log(p);
 }
 
@@ -146,7 +148,9 @@ class Particles {
       }
     }
 
-    this.v.mult(1 - this.distant * 0.001);
+    this.v.mult(1 - this.distant * 0.0001);
+    if (this.v.mag() > 10)
+      {this.v.setMag(10)}
     this.pos.add(this.v);
 
     this.a = createVector(0, 0);
